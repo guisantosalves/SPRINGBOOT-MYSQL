@@ -1,10 +1,12 @@
 package com.springboot.api.impl.services;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.springboot.api.exception.ResourceNotFoundException;
 import com.springboot.api.model.Employee;
 import com.springboot.api.repository.EmployeeRepository;
 import com.springboot.api.service.EmployeeService;
@@ -38,5 +40,18 @@ public class EmployeeServiceImpl implements EmployeeService {
     @Override
     public List<Employee> getAllEmployees(){
         return employeeRepo.findAll();
+    }
+
+    @Override
+    public Employee getEmployeebyid(Long id){
+        Optional<Employee> empp = employeeRepo.findById(id);
+
+        // if find
+        if(empp.isPresent()){
+            return empp.get();    
+        }else{
+            throw new ResourceNotFoundException(id.toString(), id.toString(), empp.get());
+        }
+         
     }
 }
