@@ -1,5 +1,7 @@
 package com.springboot.api.controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
@@ -28,7 +30,7 @@ public class EmployeeController {
     // -> https://www.javaprogressivo.net/2012/10/Interface-em-Java-implements-O-que-e-para-que-serve-como-funciona.html
     private EmployeeService EmployeeService;
 
-    @Autowired // linking
+    @Autowired // linking - dependency injection
     public EmployeeController(EmployeeService employeeService){
         super();
         this.EmployeeService = employeeService;
@@ -39,6 +41,12 @@ public class EmployeeController {
     @RequestMapping(method = RequestMethod.POST)
     public ResponseEntity<Employee> saveEmployee(@RequestBody Employee employee) {
         return new ResponseEntity<Employee>(EmployeeService.saveEmployee(employee), HttpStatus.CREATED);
+    }
+
+    //get all employees
+    @RequestMapping(method = RequestMethod.GET)
+    public ResponseEntity<List<Employee>> getAllEmployees(){
+        return new ResponseEntity<List<Employee>>(EmployeeService.getAllEmployees(), HttpStatus.ACCEPTED);
     }
 
 }

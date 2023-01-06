@@ -1,5 +1,7 @@
 package com.springboot.api.impl.services;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -21,16 +23,20 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     private EmployeeRepository employeeRepo;
 
-    @Autowired //linking
+    @Autowired //linking - dependecy injection
     public EmployeeServiceImpl(EmployeeRepository employeeRepo){
         this.employeeRepo = employeeRepo;
     }
 
     @Override
     public Employee saveEmployee(Employee employee){
-
+        
         // return the saved item
         return employeeRepo.save(employee);
     }
-    
+
+    @Override
+    public List<Employee> getAllEmployees(){
+        return employeeRepo.findAll();
+    }
 }
