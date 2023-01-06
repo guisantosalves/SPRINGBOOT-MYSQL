@@ -12,6 +12,8 @@ import com.springboot.api.model.Employee;
 import com.springboot.api.repository.EmployeeRepository;
 import com.springboot.api.service.EmployeeService;
 
+import jakarta.transaction.Transactional;
+
 // implements -> interface
 // extends -> class
 
@@ -59,10 +61,18 @@ public class EmployeeServiceImpl implements EmployeeService {
     @Override
     public void deleteEmployeesById(Long id) {
 
-        // verificar se existe o ID no banco antes
-        employeeRepo.deleteById(id);
-    }
+        Optional<Employee> emplo = employeeRepo.findById(id);
 
+        if(emplo.isPresent()){
+            employeeRepo.deleteById(id);
+        }else{
+            throw new IllegalStateException("Id"+ id +"doesn't exist");
+        }
+        
+        
+    }
+    
+    @Transactional
     @Override
     public Employee updateEmployeeById(Long id, Employee employee) {
         Employee emplo = employeeRepo

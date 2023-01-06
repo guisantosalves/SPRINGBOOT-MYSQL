@@ -4,8 +4,6 @@ import java.util.List;
 
 import com.springboot.api.model.Employee;
 
-import jakarta.transaction.Transactional;
-
 public interface EmployeeService {
     // return Employee / nameFunc / parameter
     Employee saveEmployee(Employee employee);
@@ -20,6 +18,5 @@ public interface EmployeeService {
     void deleteEmployeesById(Long id);
 
     //update method
-    @Transactional
     Employee updateEmployeeById(Long id, Employee employee);
 }
