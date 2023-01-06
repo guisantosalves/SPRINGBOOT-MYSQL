@@ -57,4 +57,14 @@ public class EmployeeController {
     public ResponseEntity<Employee> getEmployeebyid(@PathVariable("employeeId") Long id){
         return new ResponseEntity<Employee>(EmployeeService.getEmployeebyid(id), HttpStatus.ACCEPTED);
     }
+
+    //put
+    
+
+    //delete
+    @RequestMapping(path = "{employeeId}", method = RequestMethod.DELETE)
+    public void deleteEmployeesByid(@PathVariable("employeeId") Long id){
+        EmployeeService.deleteEmployeesById(id);
+    }
+
 }

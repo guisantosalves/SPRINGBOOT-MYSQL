@@ -54,4 +54,11 @@ public class EmployeeServiceImpl implements EmployeeService {
         }
          
     }
+
+    @Override
+    public void deleteEmployeesById(Long id){
+
+        // verificar se existe o ID no banco antes
+        employeeRepo.deleteById(id);
+    }
 }
