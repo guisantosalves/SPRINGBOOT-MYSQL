@@ -1,5 +1,7 @@
 package com.springboot.api.impl.services;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -23,5 +25,15 @@ public class CompanyServiceImpl implements CompanyService{
     @Override
     public Company saveCompany(Company company){
         return companyRepo.save(company);
-    } 
+    }
+
+    @Override
+    public List<Company> getAllCompanies(){
+        return companyRepo.findAll();
+    }
+
+    @Override
+    public void deleteCompanyById(Long id){
+        companyRepo.deleteById(id);
+    }
 }
