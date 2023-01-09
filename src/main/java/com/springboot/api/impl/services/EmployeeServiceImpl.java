@@ -66,7 +66,7 @@ public class EmployeeServiceImpl implements EmployeeService {
         if(emplo.isPresent()){
             employeeRepo.deleteById(id);
         }else{
-            throw new IllegalStateException("Id"+ id +"doesn't exist");
+            throw new IllegalStateException("Id "+ id +" doesn't exist");
         }
         
         
@@ -77,7 +77,7 @@ public class EmployeeServiceImpl implements EmployeeService {
     public Employee updateEmployeeById(Long id, Employee employee) {
         Employee emplo = employeeRepo
                 .findById(id)
-                .orElseThrow(() -> new IllegalStateException("Employee doesn't exist whit " + id + " id"));
+                .orElseThrow(() -> new IllegalStateException("Employee doesn't exist with " + id + " id"));
 
         // verifying name
         boolean verifyingName = !Objects.equals(emplo.getFirstName(), employee.getFirstName());

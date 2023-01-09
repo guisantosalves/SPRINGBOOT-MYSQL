@@ -1,16 +1,22 @@
 package com.springboot.api.model;
 
+// import java.util.Set;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+// import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
 // create automatically when start the server
 
 @Entity
-@Table(name = "employees")
+@Table(name = "employees")  
 public class Employee {
 
     @Id
@@ -26,10 +32,15 @@ public class Employee {
     @Column(name = "email")
     private String email;
 
+    // campo mapeado por company
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "company_id", referencedColumnName = "id")
+    private Company company; 
+
     public Employee(){
 
     }
-    
+
     public Employee(long id, String firstName, String lastName, String email){
         this.id = id;
         this.firstName = firstName;
@@ -88,5 +99,14 @@ public class Employee {
         this.email = email;
     }
 
+    /*
+     * fk
+     */
+    public Company getCompany(){
+        return this.company;
+    }
+    public void setCompany(Company company){
+        this.company = company;
+    }
 }
 
