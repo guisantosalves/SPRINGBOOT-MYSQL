@@ -19,28 +19,39 @@ import jakarta.websocket.server.PathParam;
 @RestController
 @RequestMapping("/api/v1/companies")
 public class CompanyController {
-    
+
     // controller -> IService -> Service -> Repository -> model
     private CompanyService companyService;
 
     @Autowired // dependency injection
-    public CompanyController(CompanyService companyService){
+    public CompanyController(CompanyService companyService) {
         super();
         this.companyService = companyService;
     }
 
     @RequestMapping(method = RequestMethod.POST)
-    public ResponseEntity<Company> saveCompany(@RequestBody Company company){
+    public ResponseEntity<Company> saveCompany(@RequestBody Company company) {
         return new ResponseEntity<Company>(companyService.saveCompany(company), HttpStatus.CREATED);
     }
 
     @RequestMapping(method = RequestMethod.GET)
-    public ResponseEntity<List<Company>> getAllCompanies(){
+    public ResponseEntity<List<Company>> getAllCompanies() {
         return new ResponseEntity<List<Company>>(companyService.getAllCompanies(), HttpStatus.OK);
     }
 
-    @RequestMapping(path = "{companyId}",method = RequestMethod.DELETE)
-    public void deleteCompanyById(@PathVariable("companyId") Long id){
+    @RequestMapping(path = "{companyId}", method = RequestMethod.DELETE)
+    public void deleteCompanyById(@PathVariable("companyId") Long id) {
         companyService.deleteCompanyById(id);
     }
+
+    @RequestMapping(path = "{companyId}", method = RequestMethod.GET)
+    public ResponseEntity<Company> getCompanyById(@PathVariable("companyId") Long id){
+        return new ResponseEntity<Company>(companyService.getCompanyById(id), HttpStatus.OK);
+    }
+
+    @RequestMapping(path = "{companyId}", method = RequestMethod.PUT)
+    public ResponseEntity<Company> updateCompanyById(@PathVariable("companyId") Long id, @RequestBody Company company){
+        return new ResponseEntity<Company>(companyService.updateCompanyById(id, company), HttpStatus.OK);
+    }
+    
 }
