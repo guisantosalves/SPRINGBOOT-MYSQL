@@ -5,8 +5,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.builders.WebSecurity;
-import org.springframework.security.config.annotation.web.configuration.WebSecurityConfiguration;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
@@ -26,7 +24,7 @@ public class WebMvcConfig implements WebMvcConfigurer{
     
     @Override
     public void addInterceptors(InterceptorRegistry registry){
-        registry.addInterceptor(interceptor).addPathPatterns("/api/**").excludePathPatterns("/api/v1/companies");
+        registry.addInterceptor(interceptor);
     }
 
     @Bean
