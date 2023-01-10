@@ -20,6 +20,16 @@ import jakarta.websocket.server.PathParam;
 @RequestMapping("/api/v1/companies")
 public class CompanyController {
 
+    /*
+     * @Component is a class-level annotation, but @Bean is at the method level, so
+     * 
+     * @Component is only an option when a class's source code is editable.
+     * 
+     * @Bean can always be used, but it's more verbose. @Component is compatible
+     * with Spring's auto-detection,
+     * but @Bean requires manual class instantiation.
+     */
+
     // controller -> IService -> Service -> Repository -> model
     private CompanyService companyService;
 
@@ -45,13 +55,13 @@ public class CompanyController {
     }
 
     @RequestMapping(path = "{companyId}", method = RequestMethod.GET)
-    public ResponseEntity<Company> getCompanyById(@PathVariable("companyId") Long id){
+    public ResponseEntity<Company> getCompanyById(@PathVariable("companyId") Long id) {
         return new ResponseEntity<Company>(companyService.getCompanyById(id), HttpStatus.OK);
     }
 
     @RequestMapping(path = "{companyId}", method = RequestMethod.PUT)
-    public ResponseEntity<Company> updateCompanyById(@PathVariable("companyId") Long id, @RequestBody Company company){
+    public ResponseEntity<Company> updateCompanyById(@PathVariable("companyId") Long id, @RequestBody Company company) {
         return new ResponseEntity<Company>(companyService.updateCompanyById(id, company), HttpStatus.OK);
     }
-    
+
 }
