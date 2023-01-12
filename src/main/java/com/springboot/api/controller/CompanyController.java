@@ -14,8 +14,6 @@ import org.springframework.web.bind.annotation.RestController;
 import com.springboot.api.model.Company;
 import com.springboot.api.service.CompanyService;
 
-import jakarta.websocket.server.PathParam;
-
 @RestController
 @RequestMapping("/api/v1/companies")
 public class CompanyController {
