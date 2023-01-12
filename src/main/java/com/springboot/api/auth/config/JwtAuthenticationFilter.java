@@ -2,8 +2,15 @@ package com.springboot.api.auth.config;
 
 import java.io.IOException;
 
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
+
+import com.springboot.api.auth.services.JwtService;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -22,6 +29,9 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
+    private final JwtService jwtService;
+    private final UserDetailsService userDetailsService;
+
     @Override
     protected void doFilterInternal(
             HttpServletRequest request,
@@ -30,7 +40,41 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             throws ServletException, IOException {
         
         final String authHeader = request.getHeader("Authorization");
-        System.out.println(authHeader);
+        final String jwt;
+        final String userEmail;
+
+        if(authHeader == null || !authHeader.startsWith("Bearer ")){
+            System.out.println("PASSOU AQUI ");
+            filterChain.doFilter(request, response);
+            return;
+            // Só vai cancelar se perceber que n tem o token certo
+        }
+
+        // jwt and user context logic
+        jwt = authHeader.substring(7);
+        userEmail = jwtService.extractUsername(jwt);
+
+        if(userEmail != null && SecurityContextHolder.getContext().getAuthentication() == null){
+
+            //começando o update no securitycontext
+            UserDetails userDetails = this.userDetailsService.loadUserByUsername(userEmail); // que pega do banco mysql
+            if(jwtService.IstokenValid(jwt, userDetails)){
+                //updating
+                UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
+                    userDetails,
+                    null,
+                    userDetails.getAuthorities()
+                );
+
+                authToken.setDetails(
+                    new WebAuthenticationDetailsSource().buildDetails(request) // dispatch servlet
+                );
+
+                SecurityContextHolder.getContext().setAuthentication(authToken);
+            }
+        }
+
+        filterChain.doFilter(request, response);
     }
 
 }
