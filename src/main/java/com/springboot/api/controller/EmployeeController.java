@@ -52,7 +52,7 @@ public class EmployeeController {
     // get all employees
     @RequestMapping(method = RequestMethod.GET)
     public ResponseEntity<List<Employee>> getAllEmployees() {
-        return new ResponseEntity<List<Employee>>(EmployeeService.getAllEmployees(), HttpStatus.ACCEPTED);
+        return new ResponseEntity<List<Employee>>(EmployeeService.getAllEmployees(), HttpStatus.OK);
     }
 
     // path - pathVariable

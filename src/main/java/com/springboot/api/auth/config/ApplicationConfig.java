@@ -8,6 +8,7 @@ import org.springframework.security.authentication.dao.DaoAuthenticationProvider
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import com.springboot.api.auth.repository.UserRepository;
 
@@ -29,16 +30,25 @@ public class ApplicationConfig {
         .orElseThrow(() -> new UsernameNotFoundException("User not found"));
     }
 
+    // precisa colocar o setpassword
+    // e o setuserdetails se n nao funciona
     @Bean
     public AuthenticationProvider authenticationProvider(){
         DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
         authProvider.setUserDetailsService(userDetailsService());
+        authProvider.setPasswordEncoder(passwordEnconder());
         return authProvider;
     }
 
     @Bean 
     public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception{
         return config.getAuthenticationManager();
+    }
+
+    // precisa disso pro passwordEncoder em AuthenticationService.java funcionar
+    @Bean
+    public BCryptPasswordEncoder passwordEnconder(){
+        return new BCryptPasswordEncoder();
     }
 
 }

@@ -70,6 +70,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                     new WebAuthenticationDetailsSource().buildDetails(request) // dispatch servlet
                 );
 
+                // set no context aqui e autentica no service do authenticate
                 SecurityContextHolder.getContext().setAuthentication(authToken);
             }
         }

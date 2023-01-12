@@ -1,7 +1,11 @@
 package com.springboot.api.auth.services;
 
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.springboot.api.auth.controllers.AuthenticationRequest;
 import com.springboot.api.auth.controllers.AuthenticationResponse;
 import com.springboot.api.auth.controllers.RegisterRequest;
 import com.springboot.api.auth.repository.UserRepository;
@@ -16,6 +20,8 @@ public class AuthenticationService {
     
     private final UserRepository repo;
     private final JwtService jwtService;
+    private final PasswordEncoder passwordEncoder;
+    private final AuthenticationManager authenticationManager;
 
     public AuthenticationResponse register(RegisterRequest request){
         var user = User
@@ -23,7 +29,7 @@ public class AuthenticationService {
         .firstname(request.getFirstname())
         .lastname(request.getLastname())
         .email(request.getEmail())
-        .password(request.getPassword())
+        .password(passwordEncoder.encode(request.getPassword()))
         .role(Role.USER)
         .build();
 
@@ -33,6 +39,27 @@ public class AuthenticationService {
         // gera token pra mandar de volta
         var jwtToken = jwtService.generateToken(user);
 
+        return AuthenticationResponse
+        .builder()
+        .Token(jwtToken)
+        .build();
+    }
+
+    public AuthenticationResponse register(AuthenticationRequest request){
+        authenticationManager.authenticate(
+            new UsernamePasswordAuthenticationToken(
+                request.getEmail(),
+                request.getPassword()
+            )
+        ); // valida no banco
+
+        //busca no banco
+        var user = repo
+        .findByEmail(request.getEmail())
+        .orElseThrow(() -> new IllegalStateException("User does not exist"));
+        
+        var jwtToken = jwtService.generateToken(user); // gera o tokent com base no dado do banco
+        
         return AuthenticationResponse
         .builder()
         .Token(jwtToken)

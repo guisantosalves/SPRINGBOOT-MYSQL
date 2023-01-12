@@ -1,5 +1,7 @@
 package com.springboot.api.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 // import java.util.Set;
 
 import jakarta.persistence.Column;
@@ -33,6 +35,7 @@ public class Employee {
     private String email;
 
     // campo mapeado por company
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "company_id", referencedColumnName = "id")
     private Company company; 
